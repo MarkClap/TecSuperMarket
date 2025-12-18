@@ -1,5 +1,6 @@
 package TecSupermarket.controller;
 
+import TecSupermarket.dto.AuthCheckResponse;
 import TecSupermarket.dto.LoginUserDTO;
 import TecSupermarket.dto.RegisterUserDTO;
 import TecSupermarket.service.AuthService;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +53,12 @@ public class AuthController {
 
     @GetMapping("/check-auth")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
-    public ResponseEntity<String> checkAuth(){
-        return ResponseEntity.ok().body("Autenticado");
+    public ResponseEntity<AuthCheckResponse> checkAuth(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        String role = auth.getAuthorities().iterator().next().getAuthority();
+        return ResponseEntity.ok(
+                new AuthCheckResponse(email,role)
+        );
     }
 }

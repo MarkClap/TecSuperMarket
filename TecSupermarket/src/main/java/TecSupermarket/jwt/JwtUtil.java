@@ -31,6 +31,7 @@ public class JwtUtil {
 
         return Jwts.builder()
                 .setSubject(user.getUsername())
+                .claim("role", user.getAuthorities().iterator().next().getAuthority())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000L))
                 .signWith(getKey(), SignatureAlgorithm.HS512)
