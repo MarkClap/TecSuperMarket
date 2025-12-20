@@ -1,6 +1,5 @@
 package TecSupermarket.service;
 
-
 import TecSupermarket.exception.NotFoundException;
 import TecSupermarket.model.User;
 import TecSupermarket.repository.UserRepository;
@@ -8,8 +7,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
 import java.util.List;
 
 @Service

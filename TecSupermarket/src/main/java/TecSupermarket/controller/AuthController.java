@@ -28,7 +28,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@Valid @RequestBody LoginUserDTO loginUserDto, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            return ResponseEntity.badRequest().body("Revise sus credenciales");
+            return ResponseEntity.badRequest().body("Wrong credentials");
         }
         try {
             String jwt = authService.authenticate(loginUserDto.getEmail(), loginUserDto.getPassword());
@@ -41,11 +41,11 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@Valid @RequestBody RegisterUserDTO registerUserDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            return ResponseEntity.badRequest().body("Revise los campos");
+            return ResponseEntity.badRequest().body("Check fields");
         }
         try {
             authService.registerUser(registerUserDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Registrado");
+            return ResponseEntity.status(HttpStatus.CREATED).body("Registered");
         } catch (IllegalArgumentException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
