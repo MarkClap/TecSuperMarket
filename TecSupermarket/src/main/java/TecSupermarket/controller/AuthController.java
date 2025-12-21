@@ -52,13 +52,24 @@ public class AuthController {
     }
 
     @GetMapping("/check-auth")
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
-    public ResponseEntity<AuthCheckResponse> checkAuth(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        String role = auth.getAuthorities().iterator().next().getAuthority();
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<AuthCheckResponse> checkAuth(Authentication auth) {
         return ResponseEntity.ok(
-                new AuthCheckResponse(email,role)
+                new AuthCheckResponse(
+                        auth.getName(),
+                        auth.getAuthorities().iterator().next().getAuthority()
+                )
+        );
+    }
+
+    @GetMapping("/check-auth/admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<AuthCheckResponse> checkAuthAdmin(Authentication auth) {
+        return ResponseEntity.ok(
+                new AuthCheckResponse(
+                        auth.getName(),
+                        auth.getAuthorities().iterator().next().getAuthority()
+                )
         );
     }
 }
