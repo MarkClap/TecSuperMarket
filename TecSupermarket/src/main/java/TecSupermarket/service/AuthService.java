@@ -29,6 +29,7 @@ public class AuthService {
         this.jwtUtil = jwtUtil;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
     }
+
     public String authenticate(String email, String password) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email,password);
         Authentication authResult = authenticationManagerBuilder.getObject().authenticate(authenticationToken);

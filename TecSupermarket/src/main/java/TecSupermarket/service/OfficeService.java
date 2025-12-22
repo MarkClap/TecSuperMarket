@@ -43,10 +43,9 @@ public class OfficeService implements IOfficeService {
     }
 
     @Override
-    public Void deleteOffice(Long id) {
+    public void deleteOffice(Long id) {
         if (!officeRepository.existsById(id))
             throw new NotFoundException("Office not found");
         officeRepository.deleteById(id);
-        return null;
     }
 }
