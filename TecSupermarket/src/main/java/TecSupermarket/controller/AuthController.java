@@ -71,4 +71,15 @@ public class AuthController {
                 )
         );
     }
+
+    @GetMapping("/check-auth/user")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<AuthCheckResponse> checkAuthUser(Authentication auth){
+        return ResponseEntity.ok(
+                new AuthCheckResponse(
+                        auth.getName(),
+                        auth.getAuthorities().iterator().next().getAuthority()
+                )
+        );
+    }
 }
