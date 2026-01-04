@@ -4,15 +4,15 @@ import TecSupermarket.dto.DetailSaleDTO;
 import TecSupermarket.dto.SaleDTO;
 import TecSupermarket.exception.NotFoundException;
 import TecSupermarket.mapper.Mapper;
-import TecSupermarket.model.DetailSale;
-import TecSupermarket.model.Office;
-import TecSupermarket.model.Product;
-import TecSupermarket.model.Sale;
+import TecSupermarket.model.*;
 import TecSupermarket.repository.OfficeRepository;
 import TecSupermarket.repository.ProductRepository;
 import TecSupermarket.repository.SaleRepository;
+import TecSupermarket.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +26,21 @@ public class SaleService implements ISaleService {
     private ProductRepository productRepository;
     @Autowired
     private OfficeRepository officeRepository;
+    @Autowired
+    private UserRepository userRepository;
+
+    private User getAuthenticatedUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new RuntimeException("User not authenticated");
+        }
+
+        String email = auth.getName(); // sub del JWT
+
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
 
     @Override
     public List<SaleDTO> getSales() {
@@ -61,6 +76,8 @@ public class SaleService implements ISaleService {
 
         List<DetailSale> detailSales = new ArrayList<>();
 
+        User user = getAuthenticatedUser();
+
         Double totalCalculate = 0.0;
 
         for(DetailSaleDTO detailSaleDTO : saleDto.getDetails()) {
@@ -73,6 +90,8 @@ public class SaleService implements ISaleService {
             detailSale.setPrice(detailSaleDTO.getPrice());
             detailSale.setStockProd(detailSaleDTO.getStockProd());
             detailSale.setSale(sale);
+
+            detailSales.add(detailSale);
 
             totalCalculate = totalCalculate + (detailSaleDTO.getPrice()*detailSaleDTO.getStockProd());
         }

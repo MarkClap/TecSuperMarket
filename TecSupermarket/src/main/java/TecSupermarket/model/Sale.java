@@ -26,6 +26,11 @@ public class Sale {
     private Office office;
 
     //Bidirectional
-    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<DetailSale> detail = new ArrayList<>();
+
+    //User
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private User user;
 }

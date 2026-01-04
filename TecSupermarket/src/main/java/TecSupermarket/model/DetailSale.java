@@ -26,10 +26,4 @@ public class DetailSale {
     private Product product;
     private Integer stockProd;
     private Double price;
-
-    //User
-    @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn(name = "UserId")
-    private User user;
-    private String email;
 }

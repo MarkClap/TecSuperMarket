@@ -37,4 +37,3 @@ public class User {
         this.role = roleUser;
     }
 }
-
