@@ -47,6 +47,7 @@ public class Mapper {
                 .date(sale.getDate())
                 .idOffice(sale.getOffice().getId())
                 .state(sale.getState())
+                .userEmail(sale.getUser().getEmail())
                 .details(detail)
                 .total(total)
                 .build();

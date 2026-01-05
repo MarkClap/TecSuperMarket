@@ -25,7 +25,7 @@ public class ProductService implements IProductService {
 
     @Override
     public ProductDTO createProduct(ProductDTO productDto) {
-        var product = Product.builder()
+        Product product = Product.builder()
                 .name(productDto.getName())
                 .category(productDto.getCategory())
                 .price(productDto.getPrice())
@@ -53,5 +53,6 @@ public class ProductService implements IProductService {
         if (!productRepository.existsById(id)) {
             throw new NotFoundException("Product cannot be deleted because the ID wasn't found");
         }
+        productRepository.deleteById(id);
     }
 }

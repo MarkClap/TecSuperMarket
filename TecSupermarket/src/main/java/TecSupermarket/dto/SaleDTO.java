@@ -15,7 +15,7 @@ public class SaleDTO {
     private LocalDate date;
     private String state;
     private Long idOffice;
-
+    private String userEmail;
     private List<DetailSaleDTO> details;
 
     private Double total;

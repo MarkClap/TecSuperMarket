@@ -29,6 +29,7 @@ public class SaleService implements ISaleService {
     @Autowired
     private UserRepository userRepository;
 
+    // Obtener el email del jwt
     private User getAuthenticatedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -36,7 +37,7 @@ public class SaleService implements ISaleService {
             throw new RuntimeException("User not authenticated");
         }
 
-        String email = auth.getName(); // sub del JWT
+        String email = auth.getName();
 
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -67,18 +68,18 @@ public class SaleService implements ISaleService {
             throw new NotFoundException("Office not found");
         }
 
+        User user = getAuthenticatedUser();
+
         // Create Sale
         Sale sale = new Sale();
         sale.setDate(saleDto.getDate());
         sale.setState(saleDto.getState());
         sale.setOffice(office);
         sale.setTotal(saleDto.getTotal());
-
+        sale.setUser(user);
         List<DetailSale> detailSales = new ArrayList<>();
 
-        User user = getAuthenticatedUser();
-
-        Double totalCalculate = 0.0;
+        double totalCalculate = 0.0;
 
         for(DetailSaleDTO detailSaleDTO : saleDto.getDetails()) {
             Product product = productRepository.findByName(detailSaleDTO.getNameProd()).orElse(null);
@@ -90,7 +91,6 @@ public class SaleService implements ISaleService {
             detailSale.setPrice(detailSaleDTO.getPrice());
             detailSale.setStockProd(detailSaleDTO.getStockProd());
             detailSale.setSale(sale);
-
             detailSales.add(detailSale);
 
             totalCalculate = totalCalculate + (detailSaleDTO.getPrice()*detailSaleDTO.getStockProd());
