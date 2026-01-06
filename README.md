@@ -2,9 +2,9 @@
 Esta es una API REST robusta para un sistema de ventas de productos entre usuarios, desarrollada con Java 17 y el ecosistema de Spring Boot. El sistema permite la gestión de productos, autenticación de usuarios y procesos de compra, asegurando la integridad de los datos y la seguridad mediante tokens.
 
 # 🚀 Tecnologías Utilizadas
-- Backend: Java 17, Spring Boot 3.x
+- Backend: Java 17, Spring Boot 3.
 
-- Seguridad: Spring Security, JSON Web Token (JWT)
+- Seguridad: Spring Security
 
 - Persistencia: Spring Data JPA, Hibernate
 
@@ -12,7 +12,7 @@ Esta es una API REST robusta para un sistema de ventas de productos entre usuari
 
 - Documentación: Swagger / OpenAPI 3
 
-- Gestión de Dependencias: Maven/Gradle
+- Gestión de Dependencias: Maven
 
 # 🔐 Arquitectura de Seguridad
 - El sistema implementa un flujo de autenticación basado en JWT (Stateless).
