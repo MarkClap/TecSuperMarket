@@ -25,10 +25,8 @@ Esta es una API REST robusta para un sistema de ventas de productos entre usuari
 
 - Spring Security valida el token en cada petición antes de permitir el acceso a los recursos.
 
-# 🛠️ Configuración e Instalación
-Requisitos Previos
-JDK 17 o superior.
+# 🛠️ Configuración
 
-PostgreSQL instalado y en ejecución.
-
-Maven.
+- JDK 17 o superior.
+  
+- Maven.
