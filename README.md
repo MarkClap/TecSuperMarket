@@ -25,6 +25,8 @@ Esta es una API REST robusta para un sistema de ventas de productos entre usuari
 
 - Spring Security valida el token en cada petición antes de permitir el acceso a los recursos.
 
+- Cada recurso de la API está protegido por roles lo que fomenta una mayor seguridad
+
 # 🛠️ Configuración
 
 - JDK 17 o superior.
