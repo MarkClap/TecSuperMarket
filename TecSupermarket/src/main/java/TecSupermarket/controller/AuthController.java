@@ -1,8 +1,8 @@
 package TecSupermarket.controller;
 
-import TecSupermarket.dto.AuthCheckResponse;
-import TecSupermarket.dto.LoginUserDTO;
-import TecSupermarket.dto.RegisterUserDTO;
+import TecSupermarket.dto.response.AuthCheckResponse;
+import TecSupermarket.dto.request.LoginUserRequest;
+import TecSupermarket.dto.request.RegisterUserRequest;
 import TecSupermarket.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +25,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginUserDTO loginUserDto, BindingResult bindingResult){
+    public ResponseEntity<String> login(@Valid @RequestBody LoginUserRequest loginUserRequest, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return ResponseEntity.badRequest().body("Wrong credentials");
         }
         try {
-            String jwt = authService.authenticate(loginUserDto.getEmail(), loginUserDto.getPassword());
+            String jwt = authService.authenticate(loginUserRequest.getEmail(), loginUserRequest.getPassword());
             return ResponseEntity.ok(jwt);
         } catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -38,12 +38,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@Valid @RequestBody RegisterUserDTO registerUserDTO, BindingResult bindingResult){
+    public ResponseEntity<String> register(@Valid @RequestBody RegisterUserRequest registerUserRequest, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return ResponseEntity.badRequest().body("Check fields");
         }
         try {
-            authService.registerUser(registerUserDTO);
+            authService.registerUser(registerUserRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body("Registered");
         } catch (IllegalArgumentException e){
             return ResponseEntity.badRequest().body(e.getMessage());

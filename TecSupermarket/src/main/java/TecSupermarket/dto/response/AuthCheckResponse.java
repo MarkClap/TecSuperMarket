@@ -1,4 +1,4 @@
-package TecSupermarket.dto;
+package TecSupermarket.dto.response;
 
 public record AuthCheckResponse(
     String email,

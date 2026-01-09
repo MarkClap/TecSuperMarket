@@ -1,6 +1,6 @@
 package TecSupermarket.service;
 
-import TecSupermarket.dto.RegisterUserDTO;
+import TecSupermarket.dto.request.RegisterUserRequest;
 import TecSupermarket.enums.RoleList;
 import TecSupermarket.exception.NotFoundException;
 import TecSupermarket.jwt.JwtUtil;
@@ -37,13 +37,13 @@ public class AuthService {
         return jwtUtil.generateToken(authResult);
     }
 
-    public void registerUser(RegisterUserDTO registerUserDTO){
-        if (userService.existByEmail(registerUserDTO.getEmail())){
+    public void registerUser(RegisterUserRequest registerUserRequest){
+        if (userService.existByEmail(registerUserRequest.getEmail())){
             throw new IllegalArgumentException("This email was used");
         }
 
         Role roleUser = (Role) roleRepository.findByName(RoleList.ROLE_USER).orElseThrow(()->new NotFoundException("Role not found"));
-        User user = new User(registerUserDTO.getEmail(), passwordEncoder.encode(registerUserDTO.getPassword()) , roleUser);
+        User user = new User(registerUserRequest.getEmail(), passwordEncoder.encode(registerUserRequest.getPassword()) , roleUser);
         userService.save(user);
     }
 }

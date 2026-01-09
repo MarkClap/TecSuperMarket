@@ -1,4 +1,4 @@
-package TecSupermarket.dto;
+package TecSupermarket.dto.request;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoginUserDTO {
+public class RegisterUserRequest {
     public String email;
     public String password;
 }
