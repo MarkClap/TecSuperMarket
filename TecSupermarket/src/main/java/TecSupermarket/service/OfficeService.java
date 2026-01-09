@@ -1,6 +1,7 @@
 package TecSupermarket.service;
 
-import TecSupermarket.dto.OfficeDTO;
+import TecSupermarket.dto.request.OfficeRequest;
+import TecSupermarket.dto.response.OfficeResponse;
 import TecSupermarket.exception.NotFoundException;
 import TecSupermarket.mapper.Mapper;
 import TecSupermarket.model.Office;
@@ -17,28 +18,31 @@ public class OfficeService implements IOfficeService {
     private OfficeRepository officeRepository;
 
     @Override
-    public List<OfficeDTO> getOffices() {
+    public List<OfficeResponse> getOffices() {
         return officeRepository.findAll()
                 .stream()
-                .map(Mapper::toDTO)
+                .map(office -> new OfficeResponse(
+                        office.getId(),
+                        office.getName(),
+                        office.getDirection()
+                ))
                 .toList();
     }
 
-    @Override
-    public OfficeDTO createOffice(OfficeDTO officeDto) {
+    public OfficeResponse createOffice(OfficeRequest officeRequest) {
         Office office = Office.builder()
-                .name(officeDto.getName())
-                .direction(officeDto.getDirection())
+                .name(officeRequest.getName())
+                .direction(officeRequest.getDirection())
                 .build();
         return Mapper.toDTO(officeRepository.save(office));
     }
 
     @Override
-    public OfficeDTO updateOffice(Long id, OfficeDTO officeDto) {
+    public OfficeResponse updateOffice(Long id, OfficeRequest officeRequest) {
         Office office = officeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Office not found"));
-        office.setName(officeDto.getName());
-        office.setDirection(officeDto.getDirection());
+        office.setName(officeRequest.getName());
+        office.setDirection(officeRequest.getDirection());
         return Mapper.toDTO(officeRepository.save(office));
     }
 

@@ -1,7 +1,10 @@
 package TecSupermarket.controller;
 
 import TecSupermarket.dto.OfficeDTO;
+import TecSupermarket.dto.request.OfficeRequest;
+import TecSupermarket.dto.response.OfficeResponse;
 import TecSupermarket.service.IOfficeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,23 +21,23 @@ public class OfficeController {
     IOfficeService officeService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<List<OfficeDTO>> getOffice(){
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<OfficeResponse>> getOffice(){
         return ResponseEntity.ok(officeService.getOffices());
     }
 
     @PostMapping
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<OfficeDTO> createOffice(@RequestBody OfficeDTO officeDTO) {
-        OfficeDTO create = officeService.createOffice(officeDTO);
-        return ResponseEntity.created(URI.create("/api/offices" + create.getId())).body(create);
+    public ResponseEntity<OfficeResponse> createOffice(@Valid @RequestBody OfficeRequest officeRequest) {
+        OfficeResponse created = officeService.createOffice(officeRequest);
+        return ResponseEntity.created(URI.create("/api/offices" + created.id())).body(created);
     }
 
-    @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<OfficeDTO> updateOffice(@PathVariable Long id, @RequestBody OfficeDTO officeDTO){
-        return ResponseEntity.ok(officeService.updateOffice(id, officeDTO));
-    }
+//    @PutMapping("/{id}")
+//    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+//    public ResponseEntity<OfficeDTO> updateOffice(@PathVariable Long id, @RequestBody OfficeDTO officeDTO){
+//        return ResponseEntity.ok(officeService.updateOffice(id, officeDTO));
+//    }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")

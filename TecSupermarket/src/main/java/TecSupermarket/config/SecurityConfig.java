@@ -1,5 +1,6 @@
 package TecSupermarket.config;
 
+import TecSupermarket.jwt.CustomAccessDeniedHandler;
 import TecSupermarket.jwt.JwtAuthenticationFilter;
 import TecSupermarket.jwt.JwtEntryPoint;
 import TecSupermarket.jwt.JwtUtil;
@@ -45,7 +46,8 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtEntryPoint()))
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtEntryPoint())
+                        .accessDeniedHandler(new CustomAccessDeniedHandler()))
                 .addFilterBefore(jwtAuthenticationFilter(jwtUtil,userService), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

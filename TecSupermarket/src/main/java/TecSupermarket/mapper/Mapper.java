@@ -4,6 +4,8 @@ import TecSupermarket.dto.DetailSaleDTO;
 import TecSupermarket.dto.OfficeDTO;
 import TecSupermarket.dto.ProductDTO;
 import TecSupermarket.dto.SaleDTO;
+import TecSupermarket.dto.request.OfficeRequest;
+import TecSupermarket.dto.response.OfficeResponse;
 import TecSupermarket.model.Office;
 import TecSupermarket.model.Product;
 import TecSupermarket.model.Sale;
@@ -53,13 +55,13 @@ public class Mapper {
                 .build();
     }
 
-    // Map Office to OfficeDTO
-    public static OfficeDTO toDTO(Office office){
+    // Map Office to OfficeResponse
+    public static OfficeResponse toDTO(Office office){
         if (office == null) return null;
-        return OfficeDTO.builder()
-                .id(office.getId())
-                .name(office.getName())
-                .direction(office.getDirection())
-                .build();
+        return new OfficeResponse(
+                office.getId(),
+                office.getName(),
+                office.getDirection()
+        );
     }
 }
