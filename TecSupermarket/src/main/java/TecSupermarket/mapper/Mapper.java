@@ -1,10 +1,8 @@
 package TecSupermarket.mapper;
 
 import TecSupermarket.dto.DetailSaleDTO;
-import TecSupermarket.dto.OfficeDTO;
 import TecSupermarket.dto.ProductDTO;
 import TecSupermarket.dto.SaleDTO;
-import TecSupermarket.dto.request.OfficeRequest;
 import TecSupermarket.dto.response.OfficeResponse;
 import TecSupermarket.model.Office;
 import TecSupermarket.model.Product;

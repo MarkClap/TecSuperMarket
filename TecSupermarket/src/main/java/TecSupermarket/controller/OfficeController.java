@@ -1,6 +1,6 @@
 package TecSupermarket.controller;
 
-import TecSupermarket.dto.OfficeDTO;
+
 import TecSupermarket.dto.request.OfficeRequest;
 import TecSupermarket.dto.response.OfficeResponse;
 import TecSupermarket.service.IOfficeService;
@@ -33,11 +33,11 @@ public class OfficeController {
         return ResponseEntity.created(URI.create("/api/offices" + created.id())).body(created);
     }
 
-//    @PutMapping("/{id}")
-//    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-//    public ResponseEntity<OfficeDTO> updateOffice(@PathVariable Long id, @RequestBody OfficeDTO officeDTO){
-//        return ResponseEntity.ok(officeService.updateOffice(id, officeDTO));
-//    }
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<OfficeResponse> updateOffice(@PathVariable Long id, @RequestBody OfficeRequest officeRequest){
+       return ResponseEntity.ok(officeService.updateOffice(id, officeRequest));
+    }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
