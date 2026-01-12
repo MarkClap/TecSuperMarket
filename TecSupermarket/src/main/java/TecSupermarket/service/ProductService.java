@@ -24,26 +24,26 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public ProductDTO createProduct(ProductDTO productDto) {
+    public ProductDTO createProduct(ProductDTO productDTO) {
         Product product = Product.builder()
-                .name(productDto.getName())
-                .category(productDto.getCategory())
-                .price(productDto.getPrice())
-                .stock(productDto.getStock())
+                .name(productDTO.getName())
+                .category(productDTO.getCategory())
+                .price(productDTO.getPrice())
+                .stock(productDTO.getStock())
                 .build();
 
         return Mapper.toDTO(productRepository.save(product));
     }
 
     @Override
-    public ProductDTO updateProduct(Long id, ProductDTO productDto) {
+    public ProductDTO updateProduct(Long id, ProductDTO productDTO) {
         Product product = productRepository.findById(id)
                 .orElseThrow(()-> new NotFoundException("Product not found"));
 
-        product.setName(productDto.getName());
-        product.setCategory(productDto.getCategory());
-        product.setPrice(productDto.getPrice());
-        product.setStock(productDto.getStock());
+        product.setName(productDTO.getName());
+        product.setCategory(productDTO.getCategory());
+        product.setPrice(productDTO.getPrice());
+        product.setStock(productDTO.getStock());
 
         return Mapper.toDTO(productRepository.save(product));
     }
