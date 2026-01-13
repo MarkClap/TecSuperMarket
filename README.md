@@ -10,7 +10,7 @@ Esta es una API REST robusta para un sistema de ventas de productos entre usuari
 
 - Base de Datos: PostgreSQL
 
-- Documentación: Swagger / OpenAPI 3
+- Documentación: Swagger / OpenAPI 2.8
 
 - Gestión de Dependencias: Maven
 
