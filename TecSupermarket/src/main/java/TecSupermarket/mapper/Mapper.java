@@ -1,9 +1,9 @@
 package TecSupermarket.mapper;
 
 import TecSupermarket.dto.DetailSaleDTO;
-import TecSupermarket.dto.ProductDTO;
 import TecSupermarket.dto.SaleDTO;
 import TecSupermarket.dto.response.OfficeResponse;
+import TecSupermarket.dto.response.ProductResponse;
 import TecSupermarket.model.Office;
 import TecSupermarket.model.Product;
 import TecSupermarket.model.Sale;
@@ -12,17 +12,17 @@ import java.util.stream.Collectors;
 
 public class Mapper {
 
-    // Map Product to ProductDTO
-    public static ProductDTO toDTO(Product product){
+    // Map Product to ProductResponse
+    public static ProductResponse toDTO(Product product){
         if (product == null) return null;
 
-        return ProductDTO.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .category(product.getCategory())
-                .price(product.getPrice())
-                .stock(product.getStock())
-                .build();
+        return new  ProductResponse(
+                product.getId(),
+                product.getName(),
+                product.getCategory(),
+                product.getPrice(),
+                product.getStock()
+        );
     }
 
     // Map Sale to SaleDTO

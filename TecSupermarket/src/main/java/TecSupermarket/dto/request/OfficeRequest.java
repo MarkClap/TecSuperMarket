@@ -8,9 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class OfficeRequest {
-    @NotBlank(message = "Name obligate")
+    @NotBlank(message = "Name required")
     private String name;
 
-    @NotBlank(message = "Direction obligate")
+    @NotBlank(message = "Direction required")
     private String direction;
 }

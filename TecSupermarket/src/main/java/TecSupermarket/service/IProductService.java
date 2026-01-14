@@ -1,12 +1,13 @@
 package TecSupermarket.service;
 
-import TecSupermarket.dto.ProductDTO;
+import TecSupermarket.dto.request.ProductRequest;
+import TecSupermarket.dto.response.ProductResponse;
 
 import java.util.List;
 
 public interface IProductService {
-    List<ProductDTO> getProducts();
-    ProductDTO createProduct(ProductDTO productDTO);
-    ProductDTO updateProduct(Long id, ProductDTO productDTO);
+    List<ProductResponse> getProducts();
+    ProductResponse createProduct(ProductRequest productRequest);
+    ProductResponse updateProduct(Long id, ProductRequest productRequest);
     void deleteProduct(Long id);
 }

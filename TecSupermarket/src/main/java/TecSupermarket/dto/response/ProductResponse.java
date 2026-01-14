@@ -6,5 +6,4 @@ public record ProductResponse(
         String category,
         Double price,
         int stock
-) {
-}
+) {}

@@ -43,6 +43,7 @@ public class OfficeService implements IOfficeService {
                 .orElseThrow(() -> new NotFoundException("Office not found"));
         office.setName(officeRequest.getName());
         office.setDirection(officeRequest.getDirection());
+
         return Mapper.toDTO(officeRepository.save(office));
     }
 
