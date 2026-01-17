@@ -10,6 +10,4 @@ import lombok.*;
 public class DetailSaleRequest {
     private String nameProd;
     private Integer stockProd;
-    private Double price;
-    private Double subtotal;
 }

@@ -1,7 +1,8 @@
 package TecSupermarket.service;
 
-import TecSupermarket.dto.DetailSaleDTO;
-import TecSupermarket.dto.SaleDTO;
+import TecSupermarket.dto.request.DetailSaleRequest;
+import TecSupermarket.dto.request.SaleRequest;
+import TecSupermarket.dto.response.SaleResponse;
 import TecSupermarket.exception.NotFoundException;
 import TecSupermarket.mapper.Mapper;
 import TecSupermarket.model.*;
@@ -44,84 +45,77 @@ public class SaleService implements ISaleService {
     }
 
     @Override
-    public List<SaleDTO> getSales() {
-        List<Sale> sales = saleRepository.findAll();
-        List<SaleDTO> salesDTO = new ArrayList<>();
-        SaleDTO dto;
+    public List<SaleResponse> getSales() {
+        User user = getAuthenticatedUser();
+        List<Sale> sales = saleRepository.findSaleByUser(user);
+        List<SaleResponse> saleResponsesList = new ArrayList<>();
+        SaleResponse saleResponse;
         for (Sale sale : sales) {
-            dto = Mapper.toDTO(sale);
-            salesDTO.add(dto);
+            saleResponse = Mapper.toDTO(sale);
+            saleResponsesList.add(saleResponse);
         }
-        return salesDTO;
+        return saleResponsesList;
     }
 
     @Override
-    public SaleDTO createSale(SaleDTO saleDto) {
+    public SaleResponse createSale(SaleRequest saleRequest) {
         // Validate
-        if (saleDto == null) throw new RuntimeException("SaleDto is null");
-        if (saleDto.getIdOffice() == null) throw new RuntimeException("Need Office");
-        if (saleDto.getDetails() == null || saleDto.getDetails().isEmpty()) throw new RuntimeException("Need a product");
+        if (saleRequest == null) throw new RuntimeException("SaleDto is null");
+        if (saleRequest.getIdOffice() == null) throw new RuntimeException("Need Office");
+        if (saleRequest.getDetails() == null || saleRequest.getDetails().isEmpty()) throw new RuntimeException("Need a product");
 
         // Search Office
-        Office office = officeRepository.findById(saleDto.getIdOffice()).orElse(null);
+        Office office = officeRepository.findById(saleRequest.getIdOffice()).orElse(null);
         if (office == null) {
             throw new NotFoundException("Office not found");
         }
+
+
 
         User user = getAuthenticatedUser();
 
         // Create Sale
         Sale sale = new Sale();
-        sale.setDate(saleDto.getDate());
-        sale.setState(saleDto.getState());
+        sale.setState(saleRequest.getState());
         sale.setOffice(office);
-        sale.setTotal(saleDto.getTotal());
         sale.setUser(user);
         List<DetailSale> detailSales = new ArrayList<>();
 
         double totalCalculate = 0.0;
 
-        for(DetailSaleDTO detailSaleDTO : saleDto.getDetails()) {
-            Product product = productRepository.findByName(detailSaleDTO.getNameProd()).orElse(null);
+        for(DetailSaleRequest detailSaleRequest  : saleRequest.getDetails()) {
+            Product product = productRepository.findByName(detailSaleRequest.getNameProd()).orElse(null);
             if (product == null) {
-                throw new RuntimeException("Product not Found" + detailSaleDTO.getNameProd());
+                throw new RuntimeException("Product not Found" + detailSaleRequest.getNameProd());
             }
             DetailSale detailSale = new DetailSale();
             detailSale.setProduct(product);
-            detailSale.setPrice(detailSaleDTO.getPrice());
-            detailSale.setStockProd(detailSaleDTO.getStockProd());
+            detailSale.setPrice(product.getPrice());
+            detailSale.setStockProd(detailSaleRequest.getStockProd());
             detailSale.setSale(sale);
+            detailSale.setSubtotal(detailSaleRequest.getStockProd()*product.getPrice());
             detailSales.add(detailSale);
 
-            totalCalculate = totalCalculate + (detailSaleDTO.getPrice()*detailSaleDTO.getStockProd());
+            totalCalculate = totalCalculate + (detailSaleRequest.getStockProd()*product.getPrice());
         }
 
         sale.setDetail(detailSales);
+        sale.setTotal(totalCalculate);
         sale = saleRepository.save(sale);
-
         return Mapper.toDTO(sale);
     }
 
     @Override
-    public SaleDTO updateSale(Long id, SaleDTO saleDto) {
+    public SaleResponse updateSale(Long id, SaleRequest saleRequest) {
         //Search Sale
         Sale sale = saleRepository.findById(id).orElse(null);
         if(sale == null) throw new RuntimeException("Sale not Found");
-        if (saleDto.getDate() != null) {
-            sale.setDate(saleDto.getDate());
+        if (saleRequest.getState() != null) {
+            sale.setState(saleRequest.getState());
         }
-        if (saleDto.getDate() != null) {
-            sale.setDate(saleDto.getDate());
-        }
-        if (saleDto.getState() != null) {
-            sale.setState(saleDto.getState());
-        }
-        if (saleDto.getTotal() != null) {
-            sale.setTotal(saleDto.getTotal());
-        }
-        if (saleDto.getIdOffice() != null) {
+        if (saleRequest.getIdOffice() != null) {
             // Search Office
-            Office office = officeRepository.findById(saleDto.getIdOffice()).orElse(null);
+            Office office = officeRepository.findById(saleRequest.getIdOffice()).orElse(null);
             if (office == null) throw new NotFoundException("Office not found");
             sale.setOffice(office);
         }

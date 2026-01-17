@@ -27,4 +27,5 @@ public class DetailSale {
     private Product product;
     private Integer stockProd;
     private Double price;
+    private Double subtotal;
 }

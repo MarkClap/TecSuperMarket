@@ -1,6 +1,7 @@
 package TecSupermarket.controller;
 
-import TecSupermarket.dto.SaleDTO;
+import TecSupermarket.dto.request.SaleRequest;
+import TecSupermarket.dto.response.SaleResponse;
 import TecSupermarket.service.ISaleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,21 +20,21 @@ public class SaleController {
 
     @GetMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<SaleDTO>> getSales(){
+    public ResponseEntity<List<SaleResponse>> getSales(){
         return ResponseEntity.ok(saleService.getSales());
     }
 
     @PostMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<SaleDTO> createSale(@RequestBody SaleDTO saleDTO){
-        SaleDTO create = saleService.createSale(saleDTO);
-        return ResponseEntity.created(URI.create("/api/sales" + create.getId())).body(create);
+    public ResponseEntity<SaleResponse> createSale(@RequestBody SaleRequest saleRequest){
+        SaleResponse created = saleService.createSale(saleRequest);
+        return ResponseEntity.created(URI.create("/api/sales" + created.id())).body(created);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('USER')")
-    public SaleDTO updateSale(@PathVariable Long id, @RequestBody SaleDTO saleDto) {
-        return saleService.updateSale(id,saleDto);
+    public ResponseEntity<SaleResponse> updateSale(@PathVariable Long id, @RequestBody SaleRequest saleRequest) {
+        return ResponseEntity.ok(saleService.updateSale(id, saleRequest));
     }
 
     @DeleteMapping("/{id}")

@@ -1,6 +1,9 @@
 package TecSupermarket.dto.request;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 
 @Getter
@@ -15,7 +18,10 @@ public class ProductRequest {
     @NotBlank(message = "Category required")
     private String category;
 
-    @NotBlank(message = "Price required")
+    @NotNull(message = "Price required")
+    @Positive(message = "Price must be greater than 0")
     private Double price;
+
+    @Min(value = 0, message = "Stock cannot be negative")
     private int stock;
 }

@@ -12,9 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class SaleRequest {
-    private LocalDate date;
     private String state;
     private Long idOffice;
     private String userEmail;
-    private List<DetailSaleResponse> details;
+    private List<DetailSaleRequest> details;
 }

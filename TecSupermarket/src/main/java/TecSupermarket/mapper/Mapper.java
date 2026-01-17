@@ -1,9 +1,9 @@
 package TecSupermarket.mapper;
 
-import TecSupermarket.dto.DetailSaleDTO;
-import TecSupermarket.dto.SaleDTO;
+import TecSupermarket.dto.response.DetailSaleResponse;
 import TecSupermarket.dto.response.OfficeResponse;
 import TecSupermarket.dto.response.ProductResponse;
+import TecSupermarket.dto.response.SaleResponse;
 import TecSupermarket.model.Office;
 import TecSupermarket.model.Product;
 import TecSupermarket.model.Sale;
@@ -26,31 +26,27 @@ public class Mapper {
     }
 
     // Map Sale to SaleDTO
-    public static SaleDTO toDTO(Sale sale){
+    public static SaleResponse toDTO(Sale sale){
         if (sale == null) return null;
         var detail = sale.getDetail().stream().map(detailSale ->
-                DetailSaleDTO.builder()
-                        .id(detailSale.getProduct().getId())
-                        .nameProd(detailSale.getProduct().getName())
-                        .stockProd(detailSale.getStockProd())
-                        .price(detailSale.getPrice())
-                        .subtotal(detailSale.getPrice() * detailSale.getStockProd())
-                        .build()
-        ).collect(Collectors.toList());
+                new DetailSaleResponse(
+                        detailSale.getId(),
+                        detailSale.getProduct().getName(),
+                        detailSale.getStockProd(),
+                        detailSale.getPrice(),
+                        detailSale.getPrice()* detailSale.getStockProd()
+                )
+        ).toList();
 
-        var total = detail.stream()
-                .map(DetailSaleDTO::getSubtotal)
-                .reduce(0.0, Double::sum);
-
-        return SaleDTO.builder()
-                .id(sale.getId())
-                .date(sale.getDate())
-                .idOffice(sale.getOffice().getId())
-                .state(sale.getState())
-                .userEmail(sale.getUser().getEmail())
-                .details(detail)
-                .total(total)
-                .build();
+        return new SaleResponse(
+                sale.getId(),
+                sale.getDate(),
+                sale.getState(),
+                sale.getOffice().getId(),
+                sale.getUser().getEmail(),
+                detail,
+                sale.getTotal()
+        );
     }
 
     // Map Office to OfficeResponse

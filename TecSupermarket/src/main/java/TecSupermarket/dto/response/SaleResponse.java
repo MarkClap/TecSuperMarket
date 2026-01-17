@@ -1,7 +1,5 @@
 package TecSupermarket.dto.response;
 
-import TecSupermarket.dto.DetailSaleDTO;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -11,7 +9,7 @@ public record SaleResponse(
         String state,
         Long idOffice,
         String userEmail,
-        List<DetailSaleDTO>details,
+        List<DetailSaleResponse> details,
         Double total
 ) {
 }
