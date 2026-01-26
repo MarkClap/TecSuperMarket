@@ -3,6 +3,7 @@ package TecSupermarket.controller;
 import TecSupermarket.dto.request.SaleRequest;
 import TecSupermarket.dto.response.SaleResponse;
 import TecSupermarket.service.ISaleService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,14 +27,14 @@ public class SaleController {
 
     @PostMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<SaleResponse> createSale(@RequestBody SaleRequest saleRequest){
+    public ResponseEntity<SaleResponse> createSale(@Valid  @RequestBody SaleRequest saleRequest){
         SaleResponse created = saleService.createSale(saleRequest);
         return ResponseEntity.created(URI.create("/api/sales" + created.id())).body(created);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<SaleResponse> updateSale(@PathVariable Long id, @RequestBody SaleRequest saleRequest) {
+    public ResponseEntity<SaleResponse> updateSale(@Valid @PathVariable Long id, @RequestBody SaleRequest saleRequest) {
         return ResponseEntity.ok(saleService.updateSale(id, saleRequest));
     }
 

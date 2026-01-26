@@ -1,6 +1,8 @@
 package TecSupermarket.dto.request;
 
 import TecSupermarket.dto.response.DetailSaleResponse;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -12,8 +14,11 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class SaleRequest {
+    @NotBlank
     private String state;
+
+    @Positive(message = "Office required")
     private Long idOffice;
-    private String userEmail;
+
     private List<DetailSaleRequest> details;
 }

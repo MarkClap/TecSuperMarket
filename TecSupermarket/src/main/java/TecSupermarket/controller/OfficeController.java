@@ -35,7 +35,7 @@ public class OfficeController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<OfficeResponse> updateOffice(@PathVariable Long id, @RequestBody OfficeRequest officeRequest){
+    public ResponseEntity<OfficeResponse> updateOffice(@Valid @PathVariable Long id, @RequestBody OfficeRequest officeRequest){
        return ResponseEntity.ok(officeService.updateOffice(id, officeRequest));
     }
 
