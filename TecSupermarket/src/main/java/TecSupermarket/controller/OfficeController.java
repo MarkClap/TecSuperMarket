@@ -21,7 +21,7 @@ public class OfficeController {
     IOfficeService officeService;
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<List<OfficeResponse>> getOffice(){
         return ResponseEntity.ok(officeService.getOffices());
     }

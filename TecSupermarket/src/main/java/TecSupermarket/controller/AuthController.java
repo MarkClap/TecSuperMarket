@@ -3,6 +3,7 @@ package TecSupermarket.controller;
 import TecSupermarket.dto.response.AuthCheckResponse;
 import TecSupermarket.dto.request.LoginUserRequest;
 import TecSupermarket.dto.request.RegisterUserRequest;
+import TecSupermarket.dto.response.TokenResponse;
 import TecSupermarket.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +26,15 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginUserRequest loginUserRequest, BindingResult bindingResult){
+    public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginUserRequest loginUserRequest, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            return ResponseEntity.badRequest().body("Wrong credentials");
+            return ResponseEntity.badRequest().build();
         }
-        try {
-            String jwt = authService.authenticate(loginUserRequest.getEmail(), loginUserRequest.getPassword());
-            return ResponseEntity.ok(jwt);
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        String jwt = authService.authenticate(
+                loginUserRequest.getEmail(),
+                loginUserRequest.getPassword()
+        );
+        return ResponseEntity.ok(new TokenResponse(jwt));
     }
 
     @PostMapping("/register")
