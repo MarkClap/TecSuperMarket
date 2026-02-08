@@ -10,6 +10,7 @@ import TecSupermarket.repository.OfficeRepository;
 import TecSupermarket.repository.ProductRepository;
 import TecSupermarket.repository.SaleRepository;
 import TecSupermarket.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
@@ -30,7 +31,7 @@ public class SaleService implements ISaleService {
     @Autowired
     private UserRepository userRepository;
 
-    // Obtener el email del jwt
+    // Get user email by jwt
     private User getAuthenticatedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -57,6 +58,7 @@ public class SaleService implements ISaleService {
         return saleResponsesList;
     }
 
+    @Transactional
     @Override
     public SaleResponse createSale(SaleRequest saleRequest) {
         // Validate
@@ -70,8 +72,6 @@ public class SaleService implements ISaleService {
             throw new NotFoundException("Office not found");
         }
 
-
-
         User user = getAuthenticatedUser();
 
         // Create Sale
@@ -84,10 +84,16 @@ public class SaleService implements ISaleService {
         double totalCalculate = 0.0;
 
         for(DetailSaleRequest detailSaleRequest  : saleRequest.getDetails()) {
-            Product product = productRepository.findByName(detailSaleRequest.getNameProd()).orElse(null);
-            if (product == null) {
-                throw new RuntimeException("Product not Found" + detailSaleRequest.getNameProd());
+            Product product = productRepository.findByName(detailSaleRequest.getNameProd()).orElseThrow(() ->
+                    new RuntimeException("Product don't found" + detailSaleRequest.getNameProd()));
+            if (product.getStock() < detailSaleRequest.getStockProd()){
+                throw new RuntimeException(
+                        "Insufficient stock for product " + product.getName()
+                );
             }
+            product.setStock(product.getStock() - detailSaleRequest.getStockProd());
+            productRepository.save(product);
+
             DetailSale detailSale = new DetailSale();
             detailSale.setProduct(product);
             detailSale.setPrice(product.getPrice());
